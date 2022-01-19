@@ -50,7 +50,7 @@ void visualworker::setSpeedDivider(int n)
 
 void visualworker::update(queue<Int16> *audiodata_queue, Mutex* mutex)
 {
-   int queuesize = audiodata_queue->size();
+   int queuesize = (int)audiodata_queue->size();
    if(queuesize >= Window_WID*2) // audiodata_queue => 2400
    {
       int speed = Window_WID/speeddivider;

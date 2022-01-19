@@ -15,6 +15,8 @@
 #include "visualworker.h"
 #include "global.h"
 
+#include <Windows.h>
+
 using namespace sf;
 using namespace std;
 
@@ -36,7 +38,7 @@ valarray<double> bars_fadeoff_effect_ch_r;
 
 void fft(fft_one_sample& binx)
 {
-    const int N = binx.size();
+    const int N = (int)binx.size();
     if (N <= 1) return;
 
     fft_one_sample even = binx[slice(0, N / 2, 2)];
@@ -84,6 +86,31 @@ class SampleCaptureReCorder : public SoundRecorder
     }
 };
 
+char* UTF8ToANSI(string pszCode)
+{
+    BSTR    bstrWide;
+    char* pszAnsi;
+    int     nLength;
+
+    wchar_t wtext[1024];
+
+    size_t ConvertedChars = 0;
+    mbstowcs_s(&ConvertedChars, wtext, pszCode.c_str(), pszCode.length());//includes null
+    LPWSTR ptr = wtext;
+
+    nLength = MultiByteToWideChar(CP_UTF8, 0, pszCode.c_str(), lstrlen(ptr) + 1, NULL, NULL);
+    bstrWide = SysAllocStringLen(NULL, nLength);
+
+    MultiByteToWideChar(CP_UTF8, 0, pszCode.c_str(), lstrlen(ptr) + 1, bstrWide, nLength);
+
+    nLength = WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, NULL, 0, NULL, NULL);
+    pszAnsi = new char[nLength];
+
+    WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, pszAnsi, nLength, NULL, NULL);
+    SysFreeString(bstrWide);
+
+    return pszAnsi;
+}
 
 int main()
 {
@@ -101,8 +128,14 @@ int main()
 
     for (int i = 0; i < (int)availableDevices.size(); i++)
     {
-        cout << i << ". " << availableDevices.at(i) << endl;
+        stringstream ss;
+        ss << i << ". " << availableDevices.at(i) << endl;
+
+        cout << UTF8ToANSI(ss.str());
+        //Output(ss.str());
     }
+
+    return 0;
 
     selected_device = availableDevices.at(0);
 
@@ -192,7 +225,7 @@ int main()
             }
             mutex.unlock();
 
-            int queuesize = audiodata_queue_fft.size();
+            int queuesize = (int)audiodata_queue_fft.size();
             double queuelevel = (double)queuesize / 44100.0;
             levelbox_level.setSize(Vector2f((float)(queuelevel * 100), 20));
 
