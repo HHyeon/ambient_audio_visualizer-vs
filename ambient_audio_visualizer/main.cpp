@@ -242,23 +242,23 @@ int main()
             float max = 100000000;
             int yheightmax = 100;
             double multiplier = 5.0;
-            int xpush = 100;
+            int xpush = 10;
             int ypush = 500;
-            int SecuredSamples = 1000; // about 1000 samples is Suitable counts at about 1000 samples a channel
+            int SamplesShowCount = 2500; // about 1000 samples is Suitable counts at about 1000 samples a channel
 
             int barxpos = 0;
             int visiblesamples_from = 0;
-            int visiblesamples_to = 100;
+            int visiblesamples_to = 400;
             int visiblesamples_cnt = (visiblesamples_to - visiblesamples_from);
 
-            if (visiblesamples_cnt > SecuredSamples) visiblesamples_cnt = SecuredSamples;
-            int barinterval = SecuredSamples / visiblesamples_cnt;
+            if (visiblesamples_cnt > SamplesShowCount) visiblesamples_cnt = SamplesShowCount;
+            int barinterval = SamplesShowCount / visiblesamples_cnt;
 
             for (int i = visiblesamples_from; i < visiblesamples_to; i++)
             {
                 int sample_l = (int)((abs(fftsample_l[i]) / max * multiplier) * yheightmax);
                 if (sample_l > yheightmax) sample_l = yheightmax;
-                if (sample_l <= 5) sample_l = 0;
+                //if (sample_l <= 5) sample_l = 0;
                 if (sample_l > bars_fadeoff_effect_ch_l[barxpos]) bars_fadeoff_effect_ch_l[barxpos] = sample_l;
                 else bars_fadeoff_effect_ch_l[barxpos] *= 0.5;
                 spectrum_data_ch_l.append(Vertex(Vector2f((float)((barxpos * barinterval) + xpush), (float)(ypush + bars_fadeoff_effect_ch_l[barxpos])), Color::White));
@@ -266,7 +266,7 @@ int main()
 
                 int sample_r = (int)((abs(fftsample_r[i]) / max * multiplier) * yheightmax);
                 if (sample_r > yheightmax) sample_r = yheightmax;
-                if (sample_r <= 5) sample_r = 0;
+                //if (sample_r <= 5) sample_r = 0;
                 if (sample_r > bars_fadeoff_effect_ch_r[barxpos]) bars_fadeoff_effect_ch_r[barxpos] = sample_r;
                 else bars_fadeoff_effect_ch_r[barxpos] *= 0.5;
                 spectrum_data_ch_r.append(Vertex(Vector2f((float)((barxpos * barinterval) + xpush), (float)(ypush + bars_fadeoff_effect_ch_r[barxpos])), Color::Yellow));
@@ -274,24 +274,24 @@ int main()
 
 
 
-                if (barxpos % 100 == 0)
-                {
-                    spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush - 30), Color::Green));
-                    spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush + 30), Color::Green));
-                }
-                else
-                {
-                    if (barxpos % 10 == 0)
-                    {
-                        spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush - 20), Color::Red));
-                        spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush + 20), Color::Red));
-                    }
-                }
+                //if (barxpos % 100 == 0)
+                //{
+                //    spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush - 30), Color::Green));
+                //    spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush + 30), Color::Green));
+                //}
+                //else
+                //{
+                //    if (barxpos % 10 == 0)
+                //    {
+                //        spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush - 20), Color::Red));
+                //        spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush + 20), Color::Red));
+                //    }
+                //}
                 barxpos++;
             }
 
-            spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush - 30), Color::Green));
-            spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush + 30), Color::Green));
+            //spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush - 30), Color::Green));
+            //spectrum_data_ch_r.append(Vertex(Vector2f((float)(barxpos * barinterval) + xpush, (float)ypush + 30), Color::Green));
         }
 
         window.clear();
