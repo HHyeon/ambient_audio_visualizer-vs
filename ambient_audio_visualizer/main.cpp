@@ -135,11 +135,9 @@ int main()
         //Output(ss.str());
     }
 
-    return 0;
-
     selected_device = availableDevices.at(0);
 
-    cout << selected_device << endl;
+    cout << UTF8ToANSI(selected_device) << endl;
 
     SampleCaptureReCorder recorder;
     if (!recorder.setDevice(selected_device))
@@ -201,7 +199,7 @@ int main()
                 if (event.mouseWheelScroll.delta < 0)
                     if (speeddivider < 64) speeddivider++; else;
                 else
-                    if (speeddivider > 1) speeddivider--; else;
+                    if (speeddivider > 2) speeddivider--; else;
 
                 visualcharge.setSpeedDivider(speeddivider);
             }
